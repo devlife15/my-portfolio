@@ -3,6 +3,7 @@ import Terminal from "./components/Terminal";
 import ScrambleText from "./components/ScrambleText";
 import LoadingScreen from "./components/LoadingScreen";
 import ParticleNetwork from "./components/ParticleNetwork";
+import PortfolioPage from "./components/PortfolioPage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,8 +15,7 @@ function App() {
       {!isLoading && (
         <div className="relative min-h-screen text-white">
           <ParticleNetwork />
-          <Terminal />
-          <ScrambleText text={name} />
+          <PortfolioPage />
         </div>
       )}
     </>
