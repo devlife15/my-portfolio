@@ -1,29 +1,28 @@
-export const executeCommand = async (cmd) => {
+// utils/commandExecutor.js
+
+import { commandHandlers } from "./commandHandler";
+
+export const executeCommand = async (
+  cmd,
+  context,
+  currentDir,
+  renderOutput,
+) => {
   const args = cmd.split(" ");
   const command = args[0].toLowerCase();
   const params = args.slice(1);
 
   // Add command to history
   const cmdOutput = { text: `${currentDir} $ ${cmd}`, type: "command" };
-  setCommandHistory((prev) => [...prev, cmdOutput]);
+  context.setCommandHistory((prev) => [...prev, cmdOutput]);
 
   // Empty command
   if (command === "") {
     return;
   }
 
-  // Get the handler for this command
+  // Get the handler from imported commandHandlers
   const handler = commandHandlers[command];
-
-  // Context object to pass to handlers that need state setters
-  const context = {
-    petVisible,
-    setPetVisible,
-    setPetMood,
-    setLastFed,
-    setPetMessage,
-    setCommandHistory,
-  };
 
   let output = [];
 

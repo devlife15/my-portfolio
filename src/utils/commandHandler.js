@@ -1,3 +1,7 @@
+import { commands } from "../data/commands";
+import { blogArticles } from "../data/blogPublished";
+import { codingQuotes } from "../data/codingQuotes";
+
 export const commandHandlers = {
   help: () => {
     const output = [];
