@@ -1,12 +1,12 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import Terminal from "./components/Terminal";
+import ScrambleText from "./components/ScrambleText";
 
 function App() {
+  const name = "Ayan Kumar";
   return (
     <>
       <Terminal />
+      <ScrambleText text={name} />
     </>
   );
 }

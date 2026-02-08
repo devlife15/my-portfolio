@@ -12,7 +12,7 @@ export const commands = {
   coffee: "ASCII coffee cup",
   weather: "Current weather",
   quote: "Inspirational coding quotes",
-  adopt: "Adopt a terminal pet",
+  greet: "Greet your terminal cat",
   treat: "Give your pet a treat",
   pet: "Pet your terminal companion",
   clear: "Clear terminal",

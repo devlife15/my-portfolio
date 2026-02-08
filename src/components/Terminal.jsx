@@ -3,10 +3,12 @@ import { commands } from "../data/commands";
 import { blogArticles } from "../data/blogPublished";
 import { codingQuotes } from "../data/codingQuotes";
 import { executeCommand } from "../utils/commandExecutor";
+import { programmingMemes } from "../data/programmingMemes";
+import TerminalPet from "./TerminalPet";
+import TerminalOutput from "./TerminalOutput";
 import "../customStyle.css";
 
 const Terminal = () => {
-  // ===== STATE MANAGEMENT =====
   const [input, setInput] = useState("");
   const [commandHistory, setCommandHistory] = useState([
     {
@@ -18,6 +20,11 @@ const Terminal = () => {
       type: "system-copyright",
     },
     { text: 'Type "help" to see available commands.', type: "system" },
+    { text: "", type: "system" },
+    {
+      text: '🐱 A friendly cat is keeping you company! Type "treat" to feed it, or "dismiss" to hide it.',
+      type: "system",
+    },
   ]);
   const [currentDir] = useState("~");
   const [pastCommands, setPastCommands] = useState([]);
@@ -25,8 +32,7 @@ const Terminal = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Pet state
-  const [petPosition, setPetPosition] = useState(0);
-  const [petVisible, setPetVisible] = useState(false);
+  const [petVisible, setPetVisible] = useState(true);
   const [petMood, setPetMood] = useState("happy"); // happy, hungry, sleeping
   const [lastFed, setLastFed] = useState(Date.now());
   const [petMessage, setPetMessage] = useState("Hello");
@@ -44,16 +50,6 @@ const Terminal = () => {
       e.stopPropagation();
     }
   };
-
-  // ===== DATA CONFIGURATION =====
-  // COMPONENT EXTRACTION NOTE: Move these to separate data files
-  // e.g., blogData.js, skillsData.js, quotesData.js
-
-  const programmingMemes = [
-    "https://i.imgur.com/placeholder1.jpg",
-    "https://i.imgur.com/placeholder2.jpg",
-    "https://i.imgur.com/placeholder3.jpg",
-  ];
 
   // ===== FOCUS HANDLER =====
   const handleTerminalClick = () => {
@@ -82,21 +78,22 @@ const Terminal = () => {
     if (!petVisible) return;
 
     const petInterval = setInterval(() => {
-      setPetPosition((prev) => (prev + 1) % 100);
+      // DELETE THIS LINE:
+      // setPetPosition(prev => (prev + 1) % 100)
 
       // Check if pet is hungry
       const timeSinceFed = Date.now() - lastFed;
       if (timeSinceFed > 60000) {
         // 1 minute
         setPetMood("hungry");
-        setPetMessage("Feed me! 🍽️"); // ADD THIS
+        setPetMessage("Feed me! 🍽️");
       } else if (timeSinceFed > 120000) {
         // 2 minutes
         setPetMood("sleeping");
-        setPetMessage("Zzz... 😴"); // ADD THIS
+        setPetMessage("Zzz... 😴");
       } else {
         if (petMood === "happy" && petMessage !== "Hello visitor! 👋") {
-          setPetMessage(""); // Clear message when happy and not greeting
+          setPetMessage("");
         }
       }
     }, 200);
@@ -201,12 +198,6 @@ const Terminal = () => {
       await executeCommand(cmd, context, currentDir, renderOutput);
     }
   };
-
-  // ========================================================================
-  // RENDER SECTION
-  // Each major section below can be extracted into its own component
-  // ========================================================================
-
   return (
     <div>
       {/* ===== COMPONENT: TerminalContainer ===== */}
@@ -237,51 +228,7 @@ const Terminal = () => {
           }}
           onWheel={handleWheel}
         >
-          {/* ===== COMPONENT: TerminalOutput ===== */}
-          {/* Props needed: commandHistory */}
-          {/* Each output line type can be its own sub-component */}
-          {commandHistory.map((item, index) => (
-            <div
-              key={index}
-              className={`mb-1 terminal-line ${
-                item.type === "command"
-                  ? "text-[#d4d4d4] font-bold"
-                  : item.type === "error"
-                    ? "text-[#f56565]"
-                    : item.type === "system-header"
-                      ? "text-white font-bold"
-                      : item.type === "system-border"
-                        ? "text-[#4a5568]"
-                        : item.type === "system-title"
-                          ? "text-[#00ff88] font-bold text-lg"
-                          : item.type === "system-copyright"
-                            ? "text-[#666666] text-xs"
-                            : item.type === "comment"
-                              ? "text-[#6A9955] italic"
-                              : item.type === "skill-category"
-                                ? "text-[#00ff88] font-bold"
-                                : item.type === "spotify"
-                                  ? "text-[#1DB954]"
-                                  : item.type === "quote"
-                                    ? "text-[#9CDCFE] italic"
-                                    : item.type === "blog-item"
-                                      ? "text-[#d4d4d4] cursor-pointer hover:text-[#00ff88]"
-                                      : item.type === "blog-selected"
-                                        ? "text-[#00ff88] font-bold"
-                                        : item.type === "ascii-art"
-                                          ? "text-[#00ff88] font-mono whitespace-pre"
-                                          : "text-[#d4d4d4]"
-              }`}
-              onClick={() => {
-                if (item.type === "blog-clickable" && item.url) {
-                  window.open(item.url, "_blank");
-                }
-              }}
-            >
-              {item.text}
-            </div>
-          ))}
-          {/* ===== END COMPONENT: TerminalOutput ===== */}
+          <TerminalOutput commandHistory={commandHistory} />
 
           {/* ===== COMPONENT: TerminalInput ===== */}
           {/* Props needed: input, onChange, onSubmit, onKeyDown, currentDir, inputRef */}
@@ -307,34 +254,9 @@ const Terminal = () => {
         </div>
         {/* ===== END COMPONENT: TerminalBody ===== */}
 
-        {/* ===== COMPONENT: TerminalPet ===== */}
-        {/* Props needed: petVisible, petPosition, petMood */}
-        {/* This component can be completely separate and conditionally rendered */}
         {petVisible && (
-          <div
-            className="absolute bottom-4 transition-all duration-200 pointer-events-none flex flex-col items-center"
-            style={{
-              left: `${petPosition}%`,
-            }}
-          >
-            {/* Message bubble */}
-            {petMessage && (
-              <div className="bg-[#1a1a1a] border border-[#00ff88] rounded-lg px-2 py-1 mb-1 text-xs text-[#00ff88] whitespace-nowrap animate-bounce">
-                {petMessage}
-              </div>
-            )}
-            {/* Pet character */}
-            <div
-              className="text-2xl"
-              style={{ animation: "petWalk 0.5s steps(2) infinite" }}
-            >
-              {petMood === "happy" && "🐱"}
-              {petMood === "hungry" && "😿"}
-              {petMood === "sleeping" && "😴"}
-            </div>
-          </div>
+          <TerminalPet petMood={petMood} petMessage={petMessage} />
         )}
-        {/* ===== END COMPONENT: TerminalPet ===== */}
       </div>
       {/* ===== END COMPONENT: TerminalContainer ===== */}
     </div>
@@ -342,58 +264,3 @@ const Terminal = () => {
 };
 
 export default Terminal;
-
-// ========================================================================
-// COMPONENT EXTRACTION GUIDE
-// ========================================================================
-/*
-
-SUGGESTED COMPONENT STRUCTURE:
-
-1. Terminal.jsx (Main Container)
-   ├── TerminalHeader.jsx
-   │   └── Props: title (optional)
-   │
-   ├── TerminalBody.jsx
-   │   ├── Props: commandHistory, onWheel, terminalRef
-   │   │
-   │   ├── TerminalOutput.jsx
-   │   │   ├── Props: commandHistory
-   │   │   └── Sub-components:
-   │   │       ├── OutputLine.jsx (handles different output types)
-   │   │       ├── BlogList.jsx (for blog navigation)
-   │   │       └── ASCIIArt.jsx (for ascii displays)
-   │   │
-   │   └── TerminalInput.jsx
-   │       └── Props: input, onChange, onSubmit, onKeyDown, currentDir, inputRef
-   │
-   └── TerminalPet.jsx
-       └── Props: visible, position, mood
-
-2. hooks/ (Custom Hooks)
-   ├── useCommandHistory.js
-   ├── useKeyboardNavigation.js
-   ├── useTerminalOutput.js
-   └── usePet.js
-
-3. utils/ (Utilities)
-   ├── commandExecutor.js
-   └── commands.js (command registry)
-
-4. data/ (Configuration)
-   ├── blogData.js
-   ├── skillsData.js
-   ├── quotesData.js
-   └── memesData.js
-
-5. styles/ (Optional)
-   └── terminal.css
-
-BENEFITS OF THIS STRUCTURE:
-- Easy to maintain and test
-- Reusable components
-- Clean separation of concerns
-- Easy to add new features
-- Modular and scalable
-
-*/

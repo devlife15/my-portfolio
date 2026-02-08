@@ -232,7 +232,12 @@ export const commandHandlers = {
 
   music: () => commandHandlers.spotify(), // Alias for spotify
 
-  meme: () => {
+  meme: (_, context) => {
+    const randomMeme =
+      context.programmingMemes[
+        Math.floor(Math.random() * context.programmingMemes.length)
+      ];
+
     const output = [];
     output.push({
       text: "╔════════════════════════════════════════════╗",
@@ -247,17 +252,11 @@ export const commandHandlers = {
       type: "system-border",
     });
     output.push({ text: "", type: "system" });
-    output.push({ text: "    _____", type: "ascii-art" });
-    output.push({ text: "   /     \\", type: "ascii-art" });
     output.push({
-      text: '  | () () |  "It works on my machine"',
-      type: "ascii-art",
+      type: "meme-image",
+      imageUrl: randomMeme,
     });
-    output.push({ text: "   \\  ^  /", type: "ascii-art" });
-    output.push({ text: "    |||||", type: "ascii-art" });
-    output.push({ text: "    |||||", type: "ascii-art" });
-    output.push({ text: "", type: "system" });
-    output.push({ text: "  – Every developer ever", type: "system" });
+
     return output;
   },
 
@@ -326,48 +325,18 @@ export const commandHandlers = {
     return output;
   },
 
-  adopt: (
-    _,
-    { petVisible, setPetVisible, setPetMood, setLastFed, setPetMessage },
-  ) => {
+  greet: (_, { petVisible, setPetMessage }) => {
     const output = [];
-    if (petVisible) {
+    if (!petVisible) {
       output.push({
-        text: 'You already have a pet! Type "pet" to interact with it.',
-        type: "error",
+        text: "The cat has been dismissed. It will return next time you visit!",
+        type: "system",
       });
     } else {
-      setPetVisible(true);
-      setPetMood("happy");
-      setLastFed(Date.now());
-      setPetMessage("Hello visitor! 👋");
-      output.push({
-        text: "╔════════════════════════════════════════════╗",
-        type: "system-border",
-      });
-      output.push({
-        text: "║         PET ADOPTED!                       ║",
-        type: "system-header",
-      });
-      output.push({
-        text: "╚════════════════════════════════════════════╝",
-        type: "system-border",
-      });
-      output.push({ text: "", type: "system" });
-      output.push({
-        text: "  A wild terminal cat has appeared! 🐱",
-        type: "system",
-      });
-      output.push({ text: "", type: "system" });
-      output.push({ text: "  Commands:", type: "system" });
-      output.push({ text: '  • "treat" - Feed your pet', type: "system" });
-      output.push({ text: '  • "pet" - Check on your pet', type: "system" });
-      output.push({ text: '  • "dismiss" - Hide your pet', type: "system" });
-      output.push({ text: "", type: "system" });
-      output.push({
-        text: "  Your cat will walk around the terminal!",
-        type: "system",
-      });
+      setPetMessage("Meow! 😸");
+      setTimeout(() => setPetMessage(""), 3000);
+      output.push({ text: "🐱 *purrs happily*", type: "system" });
+      output.push({ text: "Your cat greets you back!", type: "system" });
     }
     return output;
   },
