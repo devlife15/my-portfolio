@@ -6,6 +6,8 @@ const Tagline = () => {
     "Extremely Curious",
     "OCD with Perfectionism",
     "Detail Oriented",
+    "Video Editor",
+    "UI/UX",
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,7 +23,7 @@ const Tagline = () => {
   return (
     <div className="h-7 overflow-hidden relative">
       <div
-        className="transition-transform duration-500 ease-in-out"
+        className="transition-transform duration-500 ease-in-out text-xl text-gray-400 font-medium"
         style={{
           transform: `translateY(-${currentIndex * 28}px)`,
         }}

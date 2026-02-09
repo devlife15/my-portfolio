@@ -12,6 +12,9 @@ import {
 import { RiReactjsLine, RiTailwindCssFill } from "react-icons/ri";
 import { SiTypescript } from "react-icons/si";
 import Terminal from "./Terminal";
+import { GitHubCalendar } from "react-github-calendar";
+import ContactDetails from "./ContactDetails";
+import TechStack from "./TechStack";
 
 // --- Components for the Left Panel ---
 
@@ -22,16 +25,16 @@ const ContactItem = ({ icon: Icon, text }) => (
   </div>
 );
 
-const ContactDetails = () => {
-  return (
-    <div className="grid grid-cols-2 gap-y-3 gap-x-8 mb-10">
-      <ContactItem icon={FiMapPin} text="Working Remotely" />
-      <ContactItem icon={FiGlobe} text="kumarayan.com" />
-      <ContactItem icon={FiMail} text="kumarayanatwork@gmail.com" />
-      <ContactItem icon={FiClock} text="06:10 PM // same time" />
-    </div>
-  );
-};
+// const ContactDetails = () => {
+//   return (
+//     <div className="grid grid-cols-2 gap-y-3 gap-x-8 mb-10">
+//       <ContactItem icon={FiMapPin} text="Working Remotely" />
+//       <ContactItem icon={FiGlobe} text="kumarayan.com" />
+//       <ContactItem icon={FiMail} text="kumarayanatwork@gmail.com" />
+//       <ContactItem icon={FiClock} text="06:10 PM // same time" />
+//     </div>
+//   );
+// };
 
 const TechBadge = ({ icon: Icon, name, color }) => (
   <span
@@ -101,11 +104,13 @@ const SocialIcons = () => {
 
 const LeftPanel = () => {
   return (
-    <div className="p-12 pt-24 flex flex-col h-full items-start w-full">
+    <div className="p-6 pt-24 flex flex-col h-full items-start w-full">
       <ProfileHeader />
       <ContactDetails />
       <AboutSection />
       <SocialIcons />
+      <TechStack />
+      <GitHubCalendar username="devlife15" />
     </div>
   );
 };
@@ -113,14 +118,14 @@ const LeftPanel = () => {
 const PortfolioPage = () => {
   return (
     <div className="min-h-screen text-gray-200 flex items-center justify-center font-sans">
-      <div className="container max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 h-full min-h-150">
+      <div className="container max-w-360 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 h-full min-h-150 items-start">
         {/* For my Primary Details */}
         <div className="flex items-center">
           <LeftPanel />
         </div>
 
         {/* My Terminal */}
-        <div className="flex items-center justify-center p-12">
+        <div className="lg:sticky lg:top-0 lg:h-screen flex items-center justify-center p-4 max-w-3xl">
           <Terminal />
         </div>
       </div>

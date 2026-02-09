@@ -22,19 +22,14 @@ const ProfileHeader = () => {
         </div>
       </div>
       <div>
-        <h1
+        <div
           className="text-4xl font-bold text-white tracking-tight mb-2"
           style={{ fontFamily: "Inter, sans-serif" }}
         >
           <ScrambleText text={"Ayan Kumar"} />
-        </h1>
+        </div>
         <div className="flex items-center gap-3">
-          <p
-            className="text-xl text-gray-400 font-medium"
-            style={{ fontFamily: "Inter, sans-serif" }}
-          >
-            <Tagline />
-          </p>
+          <Tagline />
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>

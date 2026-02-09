@@ -199,66 +199,57 @@ const Terminal = () => {
     }
   };
   return (
-    <div>
-      {/* ===== COMPONENT: TerminalContainer ===== */}
-      <div
-        className="border border-[#2d3748]/40 rounded-md bg-[#0f0f0f] backdrop-blur-sm overflow-hidden shadow-lg shadow-black/20 relative"
-        onClick={handleTerminalClick}
-      >
-        {/* ===== COMPONENT: TerminalHeader ===== */}
-        {/* Props needed: title (optional) */}
-        <div className="bg-[#1a1a1a] px-4 py-2 flex items-center border-b border-[#2d3748]/60">
-          <div className="w-3 h-3 rounded-full bg-red-500/90 mr-2 hover:bg-red-500 transition-colors cursor-pointer"></div>
-          <div className="w-3 h-3 rounded-full bg-yellow-500/90 mr-2 hover:bg-yellow-500 transition-colors cursor-pointer"></div>
-          <div className="w-3 h-3 rounded-full bg-green-500/90 mr-2 hover:bg-green-500 transition-colors cursor-pointer"></div>
-          <div className="text-white/70 text-xs ml-2 flex items-center font-mono">
-            terminal: {currentDir}
-          </div>
+    <div
+      className="border w-full border-[#2d3748]/40 rounded-md bg-[#0f0f0f] backdrop-blur-sm overflow-hidden shadow-lg shadow-black/20 relative"
+      onClick={handleTerminalClick}
+    >
+      {/* ===== COMPONENT: TerminalHeader ===== */}
+      {/* Props needed: title (optional) */}
+      <div className="bg-[#1a1a1a] px-4 py-2 flex items-center border-b border-[#2d3748]/60">
+        <div className="w-3 h-3 rounded-full bg-red-500/90 mr-2 hover:bg-red-500 transition-colors cursor-pointer"></div>
+        <div className="w-3 h-3 rounded-full bg-yellow-500/90 mr-2 hover:bg-yellow-500 transition-colors cursor-pointer"></div>
+        <div className="w-3 h-3 rounded-full bg-green-500/90 mr-2 hover:bg-green-500 transition-colors cursor-pointer"></div>
+        <div className="text-white/70 text-xs ml-2 flex items-center font-mono">
+          terminal: {currentDir}
         </div>
-        {/* ===== END COMPONENT: TerminalHeader ===== */}
-
-        {/* ===== COMPONENT: TerminalBody ===== */}
-        {/* Props needed: commandHistory, onWheel, terminalRef */}
-        <div
-          ref={terminalRef}
-          className="p-4 text-sm font-mono h-125 overflow-y-auto custom-scrollbar bg-linear-to-b from-[#121212] to-[#0a0a0a] relative"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "#00ff88 #0f0f0f",
-          }}
-          onWheel={handleWheel}
-        >
-          <TerminalOutput commandHistory={commandHistory} />
-
-          {/* ===== COMPONENT: TerminalInput ===== */}
-          {/* Props needed: input, onChange, onSubmit, onKeyDown, currentDir, inputRef */}
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-center mt-2 group"
-          >
-            <span className="text-[#00ff88] mr-2 group-hover:text-[#38A89D] transition-colors">
-              {currentDir} $
-            </span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent outline-none text-[#d4d4d4] caret-[#00ff88]"
-              autoComplete="off"
-              spellCheck="false"
-            />
-          </form>
-          {/* ===== END COMPONENT: TerminalInput ===== */}
-        </div>
-        {/* ===== END COMPONENT: TerminalBody ===== */}
-
-        {petVisible && (
-          <TerminalPet petMood={petMood} petMessage={petMessage} />
-        )}
       </div>
-      {/* ===== END COMPONENT: TerminalContainer ===== */}
+      {/* ===== END COMPONENT: TerminalHeader ===== */}
+
+      {/* ===== COMPONENT: TerminalBody ===== */}
+      {/* Props needed: commandHistory, onWheel, terminalRef */}
+      <div
+        ref={terminalRef}
+        className="p-4 text-sm font-mono h-125 overflow-y-auto custom-scrollbar bg-linear-to-b from-[#121212] to-[#0a0a0a] relative"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "#00ff88 #0f0f0f",
+        }}
+        onWheel={handleWheel}
+      >
+        <TerminalOutput commandHistory={commandHistory} />
+
+        {/* ===== COMPONENT: TerminalInput ===== */}
+        {/* Props needed: input, onChange, onSubmit, onKeyDown, currentDir, inputRef */}
+        <form onSubmit={handleSubmit} className="flex items-center mt-2 group">
+          <span className="text-[#00ff88] mr-2 group-hover:text-[#38A89D] transition-colors">
+            {currentDir} $
+          </span>
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 bg-transparent outline-none text-[#d4d4d4] caret-[#00ff88]"
+            autoComplete="off"
+            spellCheck="false"
+          />
+        </form>
+        {/* ===== END COMPONENT: TerminalInput ===== */}
+      </div>
+      {/* ===== END COMPONENT: TerminalBody ===== */}
+
+      {petVisible && <TerminalPet petMood={petMood} petMessage={petMessage} />}
     </div>
   );
 };
