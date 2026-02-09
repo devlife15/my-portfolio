@@ -1,4 +1,3 @@
-import React from "react";
 import ProfileHeader from "./ProfileHeader";
 import {
   FiMapPin,
@@ -12,9 +11,12 @@ import {
 import { RiReactjsLine, RiTailwindCssFill } from "react-icons/ri";
 import { SiTypescript } from "react-icons/si";
 import Terminal from "./Terminal";
-import { GitHubCalendar } from "react-github-calendar";
 import ContactDetails from "./ContactDetails";
 import TechStack from "./TechStack";
+import { useLofi } from "../hooks/useLofi";
+import LofiWidget from "./LofiWidget";
+import Dock from "./Dock";
+import GithubStats from "./GithubStats";
 
 // --- Components for the Left Panel ---
 
@@ -110,14 +112,21 @@ const LeftPanel = () => {
       <AboutSection />
       <SocialIcons />
       <TechStack />
-      <GitHubCalendar username="devlife15" />
+      <GithubStats username="devlife15" />
     </div>
   );
 };
 
 const PortfolioPage = () => {
+  const { isPlaying, togglePlay, nextTrack } = useLofi();
   return (
     <div className="min-h-screen text-gray-200 flex items-center justify-center font-sans">
+      <LofiWidget
+        isPlaying={isPlaying}
+        togglePlay={togglePlay}
+        nextTrack={nextTrack}
+      />
+      <Dock />
       <div className="container max-w-360 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 h-full min-h-150 items-start">
         {/* For my Primary Details */}
         <div className="flex items-center">
@@ -126,7 +135,7 @@ const PortfolioPage = () => {
 
         {/* My Terminal */}
         <div className="lg:sticky lg:top-0 lg:h-screen flex items-center justify-center p-4 max-w-3xl">
-          <Terminal />
+          <Terminal musicState={{ isPlaying, togglePlay, nextTrack }} />
         </div>
       </div>
     </div>
