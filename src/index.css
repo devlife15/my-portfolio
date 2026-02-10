@@ -12,6 +12,12 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "geistmono";
+  src: url("/fonts/GeistMono-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
 @theme {
   --font-editorial: "ppeditorial", serif;
   --font-geist: "geist", serif;

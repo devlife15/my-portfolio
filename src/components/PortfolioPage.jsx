@@ -6,6 +6,7 @@ import { useLofi } from "../hooks/useLofi";
 import ScrambleText from "./ScrambleText";
 import Tagline from "./Tagline";
 import TerminalModal from "./TerminalModal";
+import TechStack from "./TechStack";
 
 const PortfolioPage = () => {
   const { isPlaying, togglePlay, nextTrack } = useLofi();
@@ -102,6 +103,16 @@ const PortfolioPage = () => {
               description="Agency website with WebGL interactions."
               year="2024"
             />
+          </div>
+        </section>
+
+        <section>
+          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-6">
+            Tech Stack
+          </h2>
+          {/* Opacity lowered to blend with the minimal aesthetic */}
+          <div className="opacity-60 hover:opacity-100 transition-opacity duration-500 -ml-3">
+            <TechStack />
           </div>
         </section>
 

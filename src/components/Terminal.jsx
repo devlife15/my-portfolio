@@ -200,12 +200,15 @@ const Terminal = () => {
   };
   return (
     <div
-      className="flex flex-col h-full w-full bg-[#0f0f0f] relative" // CHANGED
+      className="flex flex-col h-full w-full bg-[#0d1117] relative font-mono text-[13px] md:text-xs leading-relaxed selection:bg-green-500/30 selection:text-white"
       onClick={handleTerminalClick}
     >
+      {/* 1. Removed gradient: Flat #0d1117 looks cleaner and matches the modal.
+         2. Added 'custom-scrollbar': Ensure this class exists in index.css or use standard tailwind scroll classes
+      */}
       <div
         ref={terminalRef}
-        className="p-4 text-sm font-mono flex-1 overflow-y-auto custom-scrollbar bg-linear-to-b from-[#121212] to-[#0a0a0a] relative" // CHANGED h-125 to flex-1
+        className="flex-1 p-4 overflow-y-auto bg-[#0d1117] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "#00ff88 #0f0f0f",
@@ -215,21 +218,28 @@ const Terminal = () => {
         <TerminalOutput commandHistory={commandHistory} />
       </div>
 
-      {/* Input OUTSIDE the scrollable area so it sticks to bottom */}
-      <div className="px-4 py-3 border-t border-[#2d3748]/40">
-        <form onSubmit={handleSubmit} className="flex items-center group">
-          <span className="text-[#00ff88] mr-2 group-hover:text-[#38A89D] transition-colors">
-            {currentDir} $
+      {/* Input Area 
+         1. Border: Changed to 'border-white/5' to match the rest of the site.
+         2. Background: Matches container.
+         3. Padding: Slightly reduced for a tighter feel.
+      */}
+      <div className="px-4 py-3 border-t border-white/5 bg-[#0d1117]">
+        <form onSubmit={handleSubmit} className="flex items-center gap-2">
+          {/* Prompt: Made it non-breaking so it doesn't wrap weirdly */}
+          <span className="text-green-500 font-bold shrink-0">
+            {currentDir} <span className="text-green-400">$</span>
           </span>
+
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent outline-none text-[#d4d4d4] caret-[#00ff88]"
+            className="flex-1 bg-transparent outline-none text-gray-300 placeholder-gray-600 caret-green-500"
             autoComplete="off"
             spellCheck="false"
+            autoFocus
           />
         </form>
       </div>
