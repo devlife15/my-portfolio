@@ -73,7 +73,7 @@ const TechStack = () => {
         <h2 className="text-gray-500 text-xs font-bold tracking-widest uppercase mb-4">
           Tech Stack
         </h2>
-        <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">
+        <p className="text-gray-400 text-lg max-w-2xl leading-relaxed font-editorial">
           I'm a generalist at heart who can build with anything, but here's the
           core stack I've spent the most time with:
         </p>

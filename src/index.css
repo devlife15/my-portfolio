@@ -1,1 +1,77 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "ppeditorial";
+  src: url("/fonts/PPEditorialOld-Italic.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "geist";
+  src: url("/fonts/Geist-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+@theme {
+  --font-editorial: "ppeditorial", serif;
+  --font-geist: "geist", serif;
+}
+
+/* Recommended CSS for Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important; /* Prevent native smooth scroll conflict */
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none; /* Smooths out scrolling over iframes */
+}
+
+@layer utilities {
+  /* Blinking Cursor Animation */
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+  .animate-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  /* Scanner Line Animation */
+  @keyframes scan {
+    0% {
+      top: 0%;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      top: 100%;
+      opacity: 0;
+    }
+  }
+  .animate-scan {
+    animation: scan 3s linear infinite;
+  }
+}
