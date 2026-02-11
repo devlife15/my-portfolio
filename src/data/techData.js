@@ -16,6 +16,12 @@ export const TECH_DATA = {
     { name: "GitHub", icon: "https://cdn.simpleicons.org/github" },
     { name: "Docker", icon: "https://cdn.simpleicons.org/docker" },
     { name: "Linux", icon: "https://cdn.simpleicons.org/linux" },
+    { name: "Clerk", icon: "https://cdn.simpleicons.org/clerk" },
+    { name: "Claude", icon: "https://cdn.simpleicons.org/claude" },
+    { name: "Curl", icon: "https://cdn.simpleicons.org/curl" },
+    { name: "Bash", icon: "https://cdn.simpleicons.org/gnubash" },
+    { name: "Auth0", icon: "https://cdn.simpleicons.org/auth0" },
+    { name: "Vercel", icon: "https://cdn.simpleicons.org/vercel" },
   ],
   // For Full List View
   full: [

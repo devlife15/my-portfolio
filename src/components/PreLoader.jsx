@@ -1,86 +1,66 @@
 import React, { useState, useEffect } from "react";
 
-const languages = [
-  "Hello", // English
-  "Namaste", // Hindi
-  "Bonjour", // French
-  "Ciao", // Italian
-  "Hola", // Spanish
-  "Guten Tag", // German
-  "Hallå", // Swedish
-];
-
 const Preloader = ({ onComplete }) => {
-  const [index, setIndex] = useState(0);
-  const [fade, setFade] = useState(true); // For text fade-in/out effect
-  const [isExiting, setIsExiting] = useState(false); // Triggers the slide-up animation
+  const [progress, setProgress] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    // 1. Cycle through words
-    if (index < languages.length - 1) {
-      const timeout = setTimeout(() => {
-        setFade(false); // Start fading out
-        setTimeout(() => {
-          setIndex((prev) => prev + 1);
-          setFade(true); // Fade new word in
-        }, 200); // Wait for fade out to finish
-      }, 250); // Duration to stay visible
-      return () => clearTimeout(timeout);
-    }
+    // 1. Logic to increment the counter
+    // We use a slightly randomized interval to make it feel like "real" loading
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        // Random jump between 1 and 15
+        const jump = Math.floor(Math.random() * 15) + 1;
+        // Ensure we don't exceed 100
+        return Math.min(prev + jump, 100);
+      });
+    }, 150); // Update every 150ms
 
-    // 2. End of list -> Trigger Exit
-    else {
-      const timeout = setTimeout(() => {
-        setIsExiting(true);
-        setTimeout(() => {
-          onComplete(); // Tell parent component we are done
-        }, 800); // Wait for slide-up animation to finish
-      }, 1000); // Keep the final "Hello" on screen for a second
-      return () => clearTimeout(timeout);
-    }
-  }, [index, onComplete]);
+    return () => clearInterval(timer);
+  }, []);
 
-  // Don't render if completed (handled by parent, but safe check)
-  if (!languages[index]) return null;
+  // 2. Trigger Exit when 100% is reached
+  useEffect(() => {
+    if (progress === 100) {
+      setTimeout(() => {
+        setIsExiting(true); // Trigger slide-up animation
+        setTimeout(onComplete, 1000); // Unmount component after animation finishes
+      }, 500); // Wait 0.5s at 100% before sliding up
+    }
+  }, [progress, onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-100 flex items-center justify-center bg-black text-white transition-transform duration-700 ease-in-out ${
-        isExiting ? "-translate-y-full rounded-b-[3rem]" : "translate-y-0"
+      className={`fixed inset-0 z-100 bg-black text-[#888888] flex flex-col justify-between px-6 py-8 md:px-12 md:py-10 transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+        isExiting ? "-translate-y-full" : "translate-y-0"
       }`}
     >
-      {/* TECH VIBE: Subtle Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] opacity-20"></div>
-
-      {/* TECH VIBE: Moving "Scanner" Line */}
-      {!isExiting && (
-        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-green-500/50 to-transparent animate-scan"></div>
-      )}
-
-      {/* Center Content */}
-      <div className="relative flex items-center gap-3">
-        {/* The Dot (Pulsing) */}
-        <div className="w-2.5 h-2.5 bg-white rounded-full animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
-
-        {/* The Text */}
-        <h1
-          className={`text-4xl md:text-4xl font-editorial tracking-tight transition-opacity duration-200 ${
-            fade ? "opacity-100 blur-0" : "opacity-0 blur-sm"
-          }`}
-        >
-          {languages[index]}
-        </h1>
-
-        {/* Tech Vibe: Blinking Cursor */}
-        <span className="text-4xl md:text-6xl font-light text-green-500 animate-blink">
-          _
-        </span>
+      {/* --- TOP ROW --- */}
+      <div className="flex justify-between items-start font-geist text-xs md:text-sm tracking-[0.2em] uppercase opacity-80">
+        <span>Ayan Kumar</span>
+        <span>Portfolio ©2026</span>
       </div>
 
-      {/* Loading Percentage (Bottom Right) */}
-      <div className="absolute bottom-10 right-10 font-mono text-xs text-gray-500">
-        LOADING_ASSETS...{" "}
-        {Math.min(100, Math.round(((index + 1) / languages.length) * 100))}%
+      {/* --- BOTTOM ROW --- */}
+      <div className="flex justify-between items-end">
+        {/* Location (Bottom Left) */}
+        <div className="font-geist text-xs md:text-sm tracking-[0.2em] uppercase opacity-80 mb-2 md:mb-4">
+          Purulia, India
+        </div>
+
+        {/* Big Counter (Bottom Right) 
+            - font-editorial: Your serif font
+            - text-[18vw]: Massive responsive size based on viewport width
+            - leading-none: Tight line height
+            - italic: Matches the reference vibe
+        */}
+        <div className="font-editorial text-[20vw] md:text-[9vw] leading-[0.8] text-[#EEEEEE] italic -mr-2 md:-mr-4">
+          {progress}%
+        </div>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ const TerminalOutput = ({ commandHistory }) => {
     return (
       <div
         key={index}
-        className={`mb-1 terminal-line ${
+        className={`mb-1 terminal-line font-geistmono ${
           item.type === "command"
             ? "text-[#d4d4d4] font-bold"
             : item.type === "error"

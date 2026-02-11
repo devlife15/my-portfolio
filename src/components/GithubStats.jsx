@@ -20,7 +20,7 @@ const GithubStats = ({ username }) => {
       <div className="p-4 rounded-xl border border-white/5 bg-neutral-900/30">
         <GitHubCalendar
           username={username}
-          year="last"
+          year="2026"
           colorScheme="dark"
           theme={theme}
           blockSize={12}

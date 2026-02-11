@@ -4,7 +4,6 @@ import { blogArticles } from "../data/blogPublished";
 import { codingQuotes } from "../data/codingQuotes";
 import { executeCommand } from "../utils/commandExecutor";
 import { programmingMemes } from "../data/programmingMemes";
-import TerminalPet from "./TerminalPet";
 import TerminalOutput from "./TerminalOutput";
 import "../customStyle.css";
 
@@ -30,12 +29,6 @@ const Terminal = () => {
   const [pastCommands, setPastCommands] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // Pet state
-  const [petVisible, setPetVisible] = useState(true);
-  const [petMood, setPetMood] = useState("happy"); // happy, hungry, sleeping
-  const [lastFed, setLastFed] = useState(Date.now());
-  const [petMessage, setPetMessage] = useState("Hello");
 
   // Blog navigation state
   const [blogIndex, setBlogIndex] = useState(0);
@@ -71,35 +64,6 @@ const Terminal = () => {
       inputRef.current.focus();
     }
   }, []);
-
-  // ===== PET ANIMATION EFFECT =====
-  // COMPONENT EXTRACTION NOTE: This logic can go into a usePet() custom hook
-  useEffect(() => {
-    if (!petVisible) return;
-
-    const petInterval = setInterval(() => {
-      // DELETE THIS LINE:
-      // setPetPosition(prev => (prev + 1) % 100)
-
-      // Check if pet is hungry
-      const timeSinceFed = Date.now() - lastFed;
-      if (timeSinceFed > 60000) {
-        // 1 minute
-        setPetMood("hungry");
-        setPetMessage("Feed me! 🍽️");
-      } else if (timeSinceFed > 120000) {
-        // 2 minutes
-        setPetMood("sleeping");
-        setPetMessage("Zzz... 😴");
-      } else {
-        if (petMood === "happy" && petMessage !== "Hello visitor! 👋") {
-          setPetMessage("");
-        }
-      }
-    }, 200);
-
-    return () => clearInterval(petInterval);
-  }, [petVisible, lastFed, petMood, petMessage]);
 
   // ===== SMOOTH OUTPUT RENDERING =====
   // COMPONENT EXTRACTION NOTE: This can be a custom hook: useTerminalOutput()
@@ -184,11 +148,6 @@ const Terminal = () => {
 
       // Create context object with all needed state/setters
       const context = {
-        petVisible,
-        setPetVisible,
-        setPetMood,
-        setLastFed,
-        setPetMessage,
         setCommandHistory,
         blogArticles,
         codingQuotes,
@@ -243,8 +202,6 @@ const Terminal = () => {
           />
         </form>
       </div>
-
-      {petVisible && <TerminalPet petMood={petMood} petMessage={petMessage} />}
     </div>
   );
 };
