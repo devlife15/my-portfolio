@@ -15,21 +15,25 @@ import { FiArrowRight } from "react-icons/fi";
 import LibraryRow from "./LibraryRow";
 import BookmarkCard from "./BookmarkCard";
 import PodcastCard from "./PodcastCard";
+import { PROJECTS_DATA } from "../data/projectsData";
+import ProjectList from "./ProjectList";
+import Footer from "./Footer";
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger); // ADD
+gsap.registerPlugin(ScrollTrigger);
 
 const PortfolioPage = () => {
   const { isPlaying, togglePlay, nextTrack } = useLofi();
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
-  // Refs for each section
   const headerRef = useRef(null);
   const aboutRef = useRef(null);
   const projectsSectionRef = useRef(null);
   const techSectionRef = useRef(null);
   const writingsSectionRef = useRef(null);
   const activitySectionRef = useRef(null);
+  const librarySectionRef = useRef(null);
+  const bookmarksSectionRef = useRef(null);
+  const podcastsSectionRef = useRef(null);
   const footerRef = useRef(null);
 
   useEffect(() => {
@@ -57,11 +61,6 @@ const PortfolioPage = () => {
           "-=0.3", // Start slightly before header finishes
         );
 
-      // ============================================
-      // SCROLL TRIGGERED ANIMATIONS
-      // ============================================
-
-      // Helper function to avoid repetition
       const scrollReveal = (element, options = {}) => {
         gsap.fromTo(
           element,
@@ -81,10 +80,8 @@ const PortfolioPage = () => {
         );
       };
 
-      // Featured Projects section
       scrollReveal(projectsSectionRef.current);
 
-      // Project cards stagger
       gsap.fromTo(
         projectsSectionRef.current.querySelectorAll(".project-card"),
         { opacity: 0, y: 40 },
@@ -102,14 +99,13 @@ const PortfolioPage = () => {
         },
       );
 
-      // Tech Stack section
       scrollReveal(techSectionRef.current);
-
-      // Writings section
       scrollReveal(writingsSectionRef.current);
-
-      // Activity/GitHub section
       scrollReveal(activitySectionRef.current);
+      scrollReveal(librarySectionRef.current);
+      scrollReveal(bookmarksSectionRef.current);
+      scrollReveal(podcastsSectionRef.current);
+      scrollReveal(footerRef.current);
 
       // Footer
       gsap.fromTo(
@@ -134,18 +130,10 @@ const PortfolioPage = () => {
 
   return (
     <div className="min-h-screen text-[#888888] font-sans selection:bg-white/20 selection:text-white">
-      {/* Background */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-neutral-900/40 via-black to-black"></div>
 
-      {/* Widgets */}
-      <LofiWidget
-        isPlaying={isPlaying}
-        togglePlay={togglePlay}
-        nextTrack={nextTrack}
-      />
       <Dock onTerminalClick={() => setIsTerminalOpen(true)} />
 
-      {/* Terminal Modal */}
       <TerminalModal
         isOpen={isTerminalOpen}
         onClose={() => setIsTerminalOpen(false)}
@@ -161,33 +149,39 @@ const PortfolioPage = () => {
         >
           {" "}
           {/* Start invisible */}
-          <div className="flex items-center gap-5">
-            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 border border-white/5 overflow-hidden shadow-inner shrink-0">
-              <img
-                src="https://github.com/devlife15.png"
-                alt="Ayan"
-                className="w-full h-full object-cover opacity-90"
-              />
+          <div className="flex items-center justify-between w-full">
+            {/* LEFT SIDE: Avatar + Name/Tagline */}
+            <div className="flex items-center gap-5">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 border border-white/5 overflow-hidden shadow-inner shrink-0">
+                <img
+                  src="https://github.com/devlife15.png"
+                  alt="Ayan"
+                  className="w-full h-full object-cover opacity-90"
+                />
+              </div>
+              <div className="flex flex-col">
+                <ScrambleText
+                  text={"Ayan Kumar"}
+                  className="font-editorial text-[20px] italic font-light text-[#EEEEEE] leading-tight"
+                />
+                <Tagline />
+              </div>
             </div>
-            <div className="flex flex-col">
-              <ScrambleText
-                text={"Ayan Kumar"}
-                className="font-editorial text-[20px] italic font-light text-[#EEEEEE] leading-tight"
-              />
-              <Tagline />
-            </div>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+
+            {/* RIGHT SIDE: The Badge */}
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20 shrink-0">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              Available for work
+              <span className="hidden md:inline">Available for work</span>
+              <span className="md:hidden">Available</span>{" "}
+              {/* Optional: Shorten text on mobile */}
             </span>
           </div>
-          {/* About text - ref added */}
           <div
             ref={aboutRef}
-            className="font-geist text-[15px] leading-[1.6] space-y-5 text-[#999999]"
+            className="font-geist text-[16px] leading-[1.6] space-y-5 text-[#999999]"
           >
             <p>I'm a full-stack engineer based in Kolkata, India.</p>
             <p>
@@ -202,7 +196,6 @@ const PortfolioPage = () => {
           </div>
         </section>
 
-        {/* 2. FEATURED PROJECTS - Scroll triggered */}
         <section
           ref={projectsSectionRef}
           className="flex flex-col gap-10"
@@ -212,7 +205,6 @@ const PortfolioPage = () => {
             Featured Projects
           </h2>
           <div className="flex flex-col gap-12">
-            {/* ADD className="project-card" to each */}
             <div className="project-card">
               <ProjectCard
                 title={"Help Deskly"}
@@ -220,15 +212,36 @@ const PortfolioPage = () => {
                   "A command-line interface portfolio built with React."
                 }
                 year={"2026"}
-                src={
-                  "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src={"src/assets/her.jpeg"}
+              />
+              <ProjectCard
+                title={"Help Deskly"}
+                description={
+                  "A command-line interface portfolio built with React."
                 }
+                year={"2026"}
+                src={"src/assets/her.jpeg"}
+              />
+              <ProjectCard
+                title={"Help Deskly"}
+                description={
+                  "A command-line interface portfolio built with React."
+                }
+                year={"2026"}
+                src={"src/assets/her.jpeg"}
               />
             </div>
           </div>
         </section>
 
-        {/* 3. TECH STACK - Scroll triggered */}
+        {/* <section className={`flex flex-col gap-10`}>
+          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic">
+            Featured Projects
+          </h2>
+
+          <ProjectList projects={PROJECTS_DATA} />
+        </section> */}
+
         <section ref={techSectionRef} style={{ opacity: 0 }}>
           <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic mb-6">
             Tech Stack
@@ -238,7 +251,6 @@ const PortfolioPage = () => {
           </div>
         </section>
 
-        {/* 4. WRITINGS - Scroll triggered */}
         <section
           ref={writingsSectionRef}
           className="flex flex-col gap-10"
@@ -276,7 +288,6 @@ const PortfolioPage = () => {
             />
           </div>
 
-          {/* "SHOW MORE" LINK */}
           <a
             href="/blog"
             className="group inline-flex items-center gap-2 text-xs font-geistmono text-[#666666] hover:text-white transition-colors mt-2"
@@ -286,23 +297,25 @@ const PortfolioPage = () => {
           </a>
         </section>
 
-        {/* 5. ACTIVITY - Scroll triggered */}
         <section ref={activitySectionRef} style={{ opacity: 0 }}>
           <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-6">
-            Activity
+            Github Activity
           </h2>
           <div className="opacity-60 hover:opacity-100 transition-opacity duration-500 -ml-3">
             <GithubStats username="devlife15" />
           </div>
         </section>
 
-        <section className={`flex flex-col gap-8`}>
+        <section
+          className={`flex flex-col gap-8`}
+          ref={librarySectionRef}
+          style={{ opacity: 0 }}
+        >
           <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-4">
             Library
           </h2>
 
           <div className="flex flex-col">
-            {/* Book 1: Reading Now */}
             <LibraryRow
               title="Designing Data-Intensive Applications"
               author="Martin Kleppmann"
@@ -311,7 +324,6 @@ const PortfolioPage = () => {
               link="https://www.amazon.com/..."
             />
 
-            {/* Book 2: Finished */}
             <LibraryRow
               title="Atomic Habits"
               author="James Clear"
@@ -320,7 +332,6 @@ const PortfolioPage = () => {
               link="#"
             />
 
-            {/* Book 3: To Read */}
             <LibraryRow
               title="The Pragmatic Programmer"
               author="David Thomas & Andrew Hunt"
@@ -331,45 +342,15 @@ const PortfolioPage = () => {
           </div>
         </section>
 
-        {/* <section className={`flex flex-col gap-8`}>
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
-            Bookmarks
-          </h2>
-
-          <div className="flex flex-col">
-            <ArticleRow
-              title="The end of localhost"
-              source="Swyx.io"
-              link="https://www.swyx.io/..."
-            />
-
-            <ArticleRow
-              title="Just JavaScript: The Mental Models"
-              source="Dan Abramov"
-              link="https://..."
-            />
-
-            <ArticleRow
-              title="Design Engineering as a process"
-              source="Vercel Design"
-              link="https://..."
-            />
-
-            <ArticleRow
-              title="Why I'm betting on Rust"
-              source="Discord Blog"
-              link="https://..."
-            />
-          </div>
-        </section> */}
-        {/* Optional: 'See all bookmarks' if you have a lot */}
-
-        <section className={`flex flex-col gap-6`}>
+        <section
+          className={`flex flex-col gap-6`}
+          ref={bookmarksSectionRef}
+          style={{ opacity: 0 }}
+        >
           <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic">
             Bookmarks
           </h2>
 
-          {/* THE GRID LAYOUT: 1 column on mobile, 2 columns on desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <BookmarkCard
               title="The end of localhost"
@@ -397,12 +378,15 @@ const PortfolioPage = () => {
           </div>
         </section>
 
-        <section className={`flex flex-col gap-8`}>
+        <section
+          className={`flex flex-col gap-8`}
+          ref={podcastsSectionRef}
+          style={{ opacity: 0 }}
+        >
           <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
             Listening
           </h2>
 
-          {/* Grid Layout: 2 cols on mobile, 3 on desktop */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
             <PodcastCard
               show="Syntax.fm"
@@ -428,16 +412,7 @@ const PortfolioPage = () => {
             />
           </div>
         </section>
-
-        {/* 6. FOOTER - Scroll triggered */}
-        <footer
-          ref={footerRef}
-          className="pt-12 border-t border-white/5 flex justify-between font-geist text-[12px] text-[#444444] uppercase tracking-wider"
-          style={{ opacity: 0 }}
-        >
-          <span>© 2026 Ayan</span>
-          <span>Made with Next.js & hosted on Vercel</span>
-        </footer>
+        <Footer ref={footerRef} />
       </div>
     </div>
   );
