@@ -5,22 +5,19 @@ const BootScreen = ({ onEnter }) => {
   // State to trigger the exit animation
   const [isFading, setIsFading] = useState(false);
 
-  const handleInitialize = () => {
-    // 1. THE CRITICAL INTERACTION: Play sound to unlock browser audio engine
-    // We use a raw Audio object here for guaranteed execution independent of hooks.
-    // Ensure '/songs/open.ogg' exists!
-    const unlockAudio = new Audio("/songs/open.ogg");
-    unlockAudio.volume = 0.4;
-    // We don't need to wait for it to finish; the attempt is enough for the browser.
-    unlockAudio.play().catch((e) => console.log("Audio unlock attempt:", e));
+  const handleStart = () => {
+    // 1. Play the Startup Sound
+    const audio = new Audio("/songs/startup.mp3");
+    audio.volume = 0.3;
+    audio.play().catch((e) => console.log("Audio play failed", e));
 
-    // 2. Start the visual transition (fade out)
+    // 2. Start the fade-out animation
     setIsFading(true);
 
-    // 3. Notify parent after animation completes (matches duration-700 below)
+    // 3. Remove the boot screen after animation finishes (e.g., 1 second)
     setTimeout(() => {
       onEnter();
-    }, 700);
+    }, 1000);
   };
 
   return (
@@ -54,7 +51,7 @@ const BootScreen = ({ onEnter }) => {
 
         {/* The Interaction Button */}
         <button
-          onClick={handleInitialize}
+          onClick={handleStart}
           className="group relative flex items-center gap-3 px-8 py-3 bg-black/50 border border-green-500/30 rounded-full hover:border-green-500 hover:bg-green-500/10 transition-all duration-500 scale-100 hover:scale-105 active:scale-95 outline-none"
         >
           {/* Icon pushes slightly right on hover */}

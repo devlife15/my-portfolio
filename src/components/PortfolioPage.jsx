@@ -19,7 +19,6 @@ import { PROJECTS_DATA } from "../data/projectsData";
 import ProjectList from "./ProjectList";
 import Footer from "./Footer";
 import WorkExperience from "./WorkExperience";
-import BlogPost from "./BlogPost";
 
 gsap.registerPlugin(ScrollTrigger);
 

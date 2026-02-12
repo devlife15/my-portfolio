@@ -202,7 +202,7 @@ const Dock = ({ onTerminalClick }) => {
 
           {/* Blinking Colon (Toggles opacity every second) */}
           <span
-            className={`mx-[1px] transition-opacity duration-200 ${time.getSeconds() % 2 === 0 ? "opacity-100" : "opacity-0"}`}
+            className={`mx-px transition-opacity duration-200 ${time.getSeconds() % 2 === 0 ? "opacity-100" : "opacity-0"}`}
           >
             :
           </span>
