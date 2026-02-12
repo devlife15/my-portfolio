@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react"; // ADD useEffect, useRef
-import { gsap } from "gsap"; // ADD
-import { ScrollTrigger } from "gsap/ScrollTrigger"; // ADD
-import LofiWidget from "./LofiWidget";
+import React, { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Dock from "./Dock";
 import GithubStats from "./GithubStats";
 import { useLofi } from "../hooks/useLofi";

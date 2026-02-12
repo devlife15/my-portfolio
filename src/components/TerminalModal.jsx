@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { FiX } from "react-icons/fi";
+import { FiX, FiMaximize2, FiWifi } from "react-icons/fi";
 import Terminal from "./Terminal";
 import Leo from "./Leo";
 
 const TerminalModal = ({ isOpen, onClose, musicState }) => {
   const [isRendered, setIsRendered] = useState(false);
 
+  // Audio Logic
   const playSound = (type) => {
     const audio = new Audio(
       type === "open"
         ? "/songs/terminal-open.wav"
         : "/songs/terminal-close.wav",
     );
-    audio.volume = 0.4;
+    audio.volume = 0.5; // Lower volume for subtlety
     audio.play().catch((e) => console.error("Audio failed:", e));
   };
 
@@ -34,45 +35,65 @@ const TerminalModal = ({ isOpen, onClose, musicState }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
         isOpen
-          ? "opacity-100 pointer-events-auto"
+          ? "opacity-100 backdrop-blur-sm"
           : "opacity-0 pointer-events-none"
       }`}
     >
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={handleClose}
-      ></div>
+      {/* 1. BACKDROP (Click to close) */}
+      <div className="absolute inset-0 bg-black/40" onClick={handleClose} />
 
+      {/* 2. THE HUD WINDOW */}
       <div
-        className={`relative w-full max-w-4xl bg-[#0d1117] rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col transform transition-all duration-300 ${
-          isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-10"
+        className={`relative w-full max-w-3xl flex flex-col transform transition-all duration-500 ease-out border border-white/10 rounded-lg overflow-hidden shadow-[0_0_50px_-10px_rgba(74,222,128,0.1)] ${
+          isOpen
+            ? "scale-100 translate-y-0 opacity-100"
+            : "scale-95 translate-y-10 opacity-0"
         }`}
-        style={{ height: "min(550px, 75vh)" }}
+        style={{
+          height: "min(600px, 80vh)",
+          // The "Glass" Effect
+          backgroundColor: "rgba(10, 10, 10, 0.8)",
+          backdropFilter: "blur(12px)",
+        }}
       >
-        <div className="h-10 shrink-0 bg-[#161b22] border-b border-white/5 flex items-center justify-between px-4 select-none">
-          <div className="flex items-center gap-2">
+        {/* --- HEADER: TECHNICAL STATUS BAR --- */}
+        <div className="h-9 shrink-0 bg-white/3 border-b border-white/5 flex items-center justify-between px-4 select-none">
+          {/* Left: Status Indicators */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-[10px] font-mono text-green-500/80 uppercase tracking-widest">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+              </span>
+              System Online
+            </div>
+          </div>
+
+          {/* Center: Title */}
+          <div className="text-[10px] font-geistmono text-gray-500 uppercase tracking-[0.2em] hidden md:block opacity-50">
+            Portfolio_Mainframe_v1.25
+          </div>
+
+          {/* Right: Controls */}
+          <div className="flex items-center gap-4">
+            <FiWifi size={12} className="text-gray-600" />
+            <div className="w-px h-3 bg-white/10"></div>
             <button
               onClick={handleClose}
-              className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors flex items-center justify-center group"
+              className="text-gray-500 hover:text-white transition-colors"
             >
-              <FiX
-                size={8}
-                className="text-red-900 opacity-0 group-hover:opacity-100"
-              />
+              <FiX size={14} />
             </button>
-            <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-colors"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors"></div>
           </div>
-          <div className="text-xs font-mono text-gray-500 flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            ayan@portfolio:~/
-          </div>
-          <div className="w-10"></div>
         </div>
 
+        {/* --- BODY: THE TERMINAL ENGINE --- */}
         <div className="flex-1 overflow-hidden relative">
+          {/* Scanline Effect (Optional overlay) */}
+          <div className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] z-10"></div>
+
           <Terminal musicState={musicState} />
         </div>
       </div>

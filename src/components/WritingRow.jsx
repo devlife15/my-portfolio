@@ -1,13 +1,19 @@
 import React from "react";
 import { FiArrowUpRight } from "react-icons/fi";
+import useSystemSound from "../hooks/useSystemSound";
 
 const WritingRow = ({ title, date, link }) => {
+  const { playSound } = useSystemSound();
   return (
     <a
       href={link}
       target="_blank"
       rel="noreferrer"
       className="group flex items-baseline justify-between py-5 border-b border-white/5 hover:border-white/20 hover:bg-white/5 px-2 -mx-2 transition-all duration-300 cursor-pointer"
+      onMouseEnter={() => {
+        playSound("hover");
+      }}
+      onClick={() => playSound("click")}
     >
       <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-6 w-full">
         {/* Date: Mono font, stays subtle */}

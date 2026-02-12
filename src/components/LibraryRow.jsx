@@ -1,7 +1,9 @@
 import React from "react";
 import { FiBookOpen, FiClock, FiCheckCircle } from "react-icons/fi";
+import useSystemSound from "../hooks/useSystemSound";
 
 const LibraryRow = ({ title, author, status, rating, cover, link }) => {
+  const { playSound } = useSystemSound();
   // 1. Status Logic: Color-coded badges
   const getStatusStyle = () => {
     switch (status) {
@@ -35,6 +37,10 @@ const LibraryRow = ({ title, author, status, rating, cover, link }) => {
       target="_blank"
       rel="noreferrer"
       className="group flex items-center justify-between py-4 border-b border-white/5 hover:bg-white/5 px-3 -mx-3 transition-all duration-300 cursor-pointer"
+      onMouseEnter={() => {
+        playSound("hover");
+      }}
+      onClick={() => playSound("click")}
     >
       <div className="flex items-center gap-6">
         {/* COVER IMAGE (Small, 3:4 aspect ratio) */}

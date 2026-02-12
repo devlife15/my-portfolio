@@ -1,13 +1,16 @@
 import React from "react";
 import { FiArrowUpRight, FiLink } from "react-icons/fi";
+import useSystemSound from "../hooks/useSystemSound";
 
 const BookmarkCard = ({ title, source, link }) => {
+  const { playSound } = useSystemSound();
   return (
     <a
       href={link}
       target="_blank"
       rel="noreferrer"
-      className="group relative flex flex-col justify-between p-5 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 rounded-sm"
+      className="group relative flex flex-col justify-between p-5 border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 rounded-sm"
+      onMouseEnter={() => playSound("hover")}
     >
       {/* Top Row: Source & Icon */}
       <div className="flex justify-between items-start mb-4">

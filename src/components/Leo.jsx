@@ -66,7 +66,7 @@ const Leo = ({ isOpen }) => {
 
   return (
     <div
-      className="absolute bottom-10 right-5 z-60 flex flex-col items-end pointer-events-auto"
+      className="absolute bottom-10 right-10 z-60 flex flex-col items-end pointer-events-auto"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -82,7 +82,7 @@ const Leo = ({ isOpen }) => {
         <div className="absolute -bottom-1.5 right-0 w-0 h-0 border-l-10 border-l-transparent border-t-10 border-t-white"></div>
       </div>
 
-      <div className="w-28 h-28 hover:scale-110 transition-transform duration-300 cursor-pointer drop-shadow-2xl">
+      <div className="w-20 h-20 hover:scale-110 transition-transform duration-300 cursor-pointer drop-shadow-2xl">
         <Lottie animationData={robotAnimation} loop={true} />
       </div>
     </div>
