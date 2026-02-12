@@ -24,7 +24,7 @@ const DOCK_LINKS = [
 const PLAYLIST = [
   {
     title: "Midnight Jazz",
-    src: "https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508520.mp3?filename=goldn-116392.mp3",
+    src: "/songs/ambient.mp3",
   },
   {
     title: "Code & Chill",
@@ -59,7 +59,7 @@ const Dock = ({ onTerminalClick }) => {
   useEffect(() => {
     audioRef.current = new Audio(PLAYLIST[0].src);
     audioRef.current.loop = true;
-    audioRef.current.volume = 0.4;
+    audioRef.current.volume = 0.1;
 
     const attemptPlay = async () => {
       try {

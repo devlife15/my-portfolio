@@ -11,6 +11,7 @@ const BookmarkCard = ({ title, source, link }) => {
       rel="noreferrer"
       className="group relative flex flex-col justify-between p-5 border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 rounded-sm"
       onMouseEnter={() => playSound("hover")}
+      onClick={() => playSound("click")}
     >
       {/* Top Row: Source & Icon */}
       <div className="flex justify-between items-start mb-4">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import BootScreen from "./BootScreen";
 import Dock from "./Dock";
 import GithubStats from "./GithubStats";
 import { useLofi } from "../hooks/useLofi";
@@ -17,15 +18,19 @@ import PodcastCard from "./PodcastCard";
 import { PROJECTS_DATA } from "../data/projectsData";
 import ProjectList from "./ProjectList";
 import Footer from "./Footer";
+import WorkExperience from "./WorkExperience";
+import BlogPost from "./BlogPost";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const PortfolioPage = () => {
+  const [hasEntered, setHasEntered] = useState(false);
   const { isPlaying, togglePlay, nextTrack } = useLofi();
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   const headerRef = useRef(null);
   const aboutRef = useRef(null);
+  const experienceRef = useRef(null);
   const projectsSectionRef = useRef(null);
   const techSectionRef = useRef(null);
   const writingsSectionRef = useRef(null);
@@ -79,6 +84,25 @@ const PortfolioPage = () => {
         );
       };
 
+      scrollReveal(experienceRef.current);
+
+      gsap.fromTo(
+        experienceRef.current.querySelectorAll(".work-card"),
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: experienceRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+
       scrollReveal(projectsSectionRef.current);
 
       gsap.fromTo(
@@ -129,7 +153,7 @@ const PortfolioPage = () => {
 
   return (
     <div className="min-h-screen text-[#888888] font-sans selection:bg-white/20 selection:text-white">
-      <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-neutral-900/40 via-black to-black"></div>
+      {!hasEntered && <BootScreen onEnter={() => setHasEntered(true)} />}
 
       <Dock onTerminalClick={() => setIsTerminalOpen(true)} />
 
@@ -195,6 +219,12 @@ const PortfolioPage = () => {
           </div>
         </section>
 
+        <section ref={experienceRef} style={{ opacity: 0 }}>
+          <div className="work-card">
+            <WorkExperience />
+          </div>
+        </section>
+
         <section
           ref={projectsSectionRef}
           className="flex flex-col gap-10"
@@ -211,7 +241,7 @@ const PortfolioPage = () => {
                   "A command-line interface portfolio built with React."
                 }
                 year={"2026"}
-                src={"src/assets/her.jpeg"}
+                src={"src/assets/3.jpg"}
               />
               <ProjectCard
                 title={"Help Deskly"}
@@ -219,7 +249,7 @@ const PortfolioPage = () => {
                   "A command-line interface portfolio built with React."
                 }
                 year={"2026"}
-                src={"src/assets/her.jpeg"}
+                src={"src/assets/1.jpg"}
               />
               <ProjectCard
                 title={"Help Deskly"}
@@ -227,7 +257,7 @@ const PortfolioPage = () => {
                   "A command-line interface portfolio built with React."
                 }
                 year={"2026"}
-                src={"src/assets/her.jpeg"}
+                src={"src/assets/2.jpg"}
               />
             </div>
           </div>
@@ -328,7 +358,7 @@ const PortfolioPage = () => {
               author="James Clear"
               status="Reading"
               cover="https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385i/40121378.jpg"
-              link="#"
+              link="https://www.amazon.in/Atomic-Habits-James-Clear/dp/1847941834"
             />
 
             <LibraryRow

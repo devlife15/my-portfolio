@@ -13,7 +13,7 @@ const useSystemSound = () => {
         playbackRate = 1.8;
         break;
       case "click":
-        file = "/sounds/confirmation_033.ogg";
+        file = "/songs/click2.mp3";
         volume = 0.25;
         playbackRate = 1.0;
         break;
