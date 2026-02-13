@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BootScreen from "./BootScreen";
@@ -39,32 +39,25 @@ const PortfolioPage = () => {
   const podcastsSectionRef = useRef(null);
   const footerRef = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // Switched to useLayoutEffect for smoother initialization
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.3 }); // Small delay after loading screen
-
-      // Header block slides up and fades in
+      // --- 1. HERO ANIMATION (Unchanged) ---
+      const tl = gsap.timeline({ delay: 0.3 });
       tl.fromTo(
         headerRef.current,
         { opacity: 0, y: 40 },
         { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-      )
+      ).fromTo(
+        aboutRef.current.querySelectorAll("p"),
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power2.out" },
+        "-=0.3",
+      );
 
-        // About paragraphs stagger in
-        .fromTo(
-          aboutRef.current.querySelectorAll("p"),
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.15, // Each paragraph 0.15s after previous
-            ease: "power2.out",
-          },
-          "-=0.3", // Start slightly before header finishes
-        );
-
-      const scrollReveal = (element, options = {}) => {
+      // --- HELPER FOR SIMPLE SECTIONS ---
+      const scrollReveal = (element) => {
+        if (!element) return; // Safety check
         gsap.fromTo(
           element,
           { opacity: 0, y: 50 },
@@ -75,52 +68,55 @@ const PortfolioPage = () => {
             ease: "power3.out",
             scrollTrigger: {
               trigger: element,
-              start: "top 85%", // Trigger when top of element hits 85% of viewport
-              toggleActions: "play none none none", // Play once, don't reverse
+              start: "top 85%",
+              toggleActions: "play none none none",
             },
-            ...options,
           },
         );
       };
 
-      scrollReveal(experienceRef.current);
+      // --- 2. COMPLEX SECTIONS (Experience & Projects) ---
+      // Fix: Don't animate the container (experienceRef/projectsRef).
+      // Only animate the items inside.
 
+      // Experience Section
       gsap.fromTo(
         experienceRef.current.querySelectorAll(".work-card"),
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 50 }, // Start state
         {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          stagger: 0.15,
-          ease: "power2.out",
+          duration: 0.8,
+          stagger: 0.2, // Smoother stagger
+          ease: "power3.out",
           scrollTrigger: {
-            trigger: experienceRef.current,
+            trigger: experienceRef.current, // Trigger when the section hits view
             start: "top 80%",
             toggleActions: "play none none none",
           },
         },
       );
 
-      scrollReveal(projectsSectionRef.current);
-
+      // Featured Projects Section (The Fix)
       gsap.fromTo(
         projectsSectionRef.current.querySelectorAll(".project-card"),
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          stagger: 0.15,
-          ease: "power2.out",
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
           scrollTrigger: {
             trigger: projectsSectionRef.current,
-            start: "top 80%",
+            start: "top 75%", // Triggers slightly later for better effect
             toggleActions: "play none none none",
           },
         },
       );
 
+      // --- 3. SIMPLE SECTIONS ---
+      // These animate the whole block at once
       scrollReveal(techSectionRef.current);
       scrollReveal(writingsSectionRef.current);
       scrollReveal(activitySectionRef.current);
@@ -128,25 +124,7 @@ const PortfolioPage = () => {
       scrollReveal(bookmarksSectionRef.current);
       scrollReveal(podcastsSectionRef.current);
       scrollReveal(footerRef.current);
-
-      // Footer
-      gsap.fromTo(
-        footerRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: "top 95%",
-            toggleActions: "play none none none",
-          },
-        },
-      );
     });
-
-    // Cleanup on unmount
     return () => ctx.revert();
   }, []);
 
@@ -218,45 +196,54 @@ const PortfolioPage = () => {
           </div>
         </section>
 
-        <section ref={experienceRef} style={{ opacity: 0 }}>
-          <div className="work-card">
+        {/* --- EXPERIENCE SECTION --- */}
+        {/* Note: This will animate the entire list as one block. 
+    If you want each job to stagger, you need to add className="work-card" 
+    inside the WorkExperience.jsx map loop instead. */}
+        <section ref={experienceRef}>
+          <div className="work-card" style={{ opacity: 0 }}>
             <WorkExperience />
           </div>
         </section>
 
-        <section
-          ref={projectsSectionRef}
-          className="flex flex-col gap-10"
-          style={{ opacity: 0 }}
-        >
-          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic">
+        {/* --- PROJECTS SECTION (FIXED) --- */}
+        <section ref={projectsSectionRef} className="flex flex-col gap-8">
+          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic mb-2">
             Featured Projects
           </h2>
-          <div className="flex flex-col gap-12">
-            <div className="project-card">
+
+          <div className="flex flex-col gap-5">
+            {/* PROJECT 1 */}
+            <div className="project-card" style={{ opacity: 0 }}>
               <ProjectCard
                 title={"Help Deskly"}
                 description={
                   "A command-line interface portfolio built with React."
                 }
                 year={"2026"}
-                src={"src/assets/3.jpg"}
+                src={"src/assets/her.jpeg"}
               />
+            </div>
+
+            {/* PROJECT 2 */}
+            <div className="project-card" style={{ opacity: 0 }}>
               <ProjectCard
-                title={"Help Deskly"}
+                title={"Supply Chain V1"}
                 description={
-                  "A command-line interface portfolio built with React."
+                  "Inventory management system for high-volume water plants."
                 }
-                year={"2026"}
+                year={"2025"}
                 src={"src/assets/1.jpg"}
               />
+            </div>
+
+            {/* PROJECT 3 */}
+            <div className="project-card" style={{ opacity: 0 }}>
               <ProjectCard
-                title={"Help Deskly"}
-                description={
-                  "A command-line interface portfolio built with React."
-                }
-                year={"2026"}
-                src={"src/assets/2.jpg"}
+                title={"Portfolio OS"}
+                description={"A web-based operating system experience."}
+                year={"2025"}
+                src={"src/assets/her2.jpeg"}
               />
             </div>
           </div>
@@ -281,10 +268,10 @@ const PortfolioPage = () => {
 
         <section
           ref={writingsSectionRef}
-          className="flex flex-col gap-10"
+          className="flex flex-col gap-8"
           style={{ opacity: 0 }}
         >
-          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic">
+          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic mb-2">
             Writings
           </h2>
           <div className="flex flex-col">
@@ -318,7 +305,7 @@ const PortfolioPage = () => {
 
           <a
             href="/blog"
-            className="group inline-flex items-center gap-2 text-xs font-geistmono text-[#666666] hover:text-white transition-colors mt-2"
+            className="group inline-flex items-center gap-2 text-xs font-geistmono text-[#666666] hover:text-white transition-colors"
           >
             <span>read all posts</span>
             <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
@@ -326,7 +313,7 @@ const PortfolioPage = () => {
         </section>
 
         <section ref={activitySectionRef} style={{ opacity: 0 }}>
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-6">
+          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
             Github Activity
           </h2>
           <div className="opacity-60 hover:opacity-100 transition-opacity duration-500 -ml-3">
@@ -339,17 +326,17 @@ const PortfolioPage = () => {
           ref={librarySectionRef}
           style={{ opacity: 0 }}
         >
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-4">
+          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
             Library
           </h2>
 
           <div className="flex flex-col">
             <LibraryRow
-              title="Designing Data-Intensive Applications"
-              author="Martin Kleppmann"
+              title="Functional Programming in Scala"
+              author="Michael Pilquist, Rúnar Bjarnason, and Paul Chiusano"
               status="Reading"
-              cover="https://www.oreilly.com/covers/urn:orm:book:9781491903063/300w/"
-              link="https://www.amazon.com/..."
+              cover="https://images.manning.com/360/480/resize/book/7/28e607e-d1f1-4a84-badc-d8f436f4e4b9/Pilquist-2ed-HI.png"
+              link="https://www.manning.com/books/functional-programming-in-scala-second-edition"
             />
 
             <LibraryRow
@@ -367,15 +354,22 @@ const PortfolioPage = () => {
               cover="https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1401432508i/4099.jpg"
               link="#"
             />
+            <LibraryRow
+              title="Source Code"
+              author="Bill Gates"
+              status="To Read"
+              cover="https://m.media-amazon.com/images/I/71yR+jQLqXL._AC_UF1000,1000_QL80_.jpg"
+              link="https://www.amazon.in/Source-Code-Beginnings-Bill-Gates-ebook/dp/B0D5TZ1N6M"
+            />
           </div>
         </section>
 
         <section
-          className={`flex flex-col gap-6`}
+          className={`flex flex-col gap-8`}
           ref={bookmarksSectionRef}
           style={{ opacity: 0 }}
         >
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic">
+          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
             Bookmarks
           </h2>
 

@@ -65,7 +65,7 @@ const WorkExperience = () => {
               <div
                 className={`absolute -left-1.25 top-2 w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
                   isActive
-                    ? "bg-green-500 border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)] scale-125"
+                    ? "bg-green-500 animate-pulse border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)] scale-125"
                     : "bg-[#111] border-white/20"
                 }`}
               ></div>

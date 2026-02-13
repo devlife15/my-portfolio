@@ -38,11 +38,12 @@ const TECH_STACK = [
   },
 ];
 
-const Footer = ({ footerRef }) => {
+const Footer = ({ ref }) => {
   return (
     <footer
-      ref={footerRef}
+      ref={ref}
       className="pt-8 pb-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center md:items-start gap-6 font-geist text-[10px] text-[#EEEEEE] uppercase tracking-wider"
+      style={{ opacity: 0 }}
     >
       {/* LEFT SIDE */}
       <div className="flex flex-col gap-1 text-center md:text-left">

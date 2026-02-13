@@ -9,7 +9,7 @@ const WritingRow = ({ title, date, link }) => {
       href={link}
       target="_blank"
       rel="noreferrer"
-      className="group flex items-baseline justify-between py-5 border-b border-white/5 hover:border-white/20 hover:bg-white/5 px-2 -mx-2 transition-all duration-300 cursor-pointer"
+      className="group flex items-baseline justify-between py-3 border-b border-white/5 hover:border-white/20 hover:bg-white/5 px-2 -mx-2 transition-all duration-300 cursor-pointer"
       onMouseEnter={() => {
         playSound("hover");
       }}
