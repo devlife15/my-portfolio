@@ -7,7 +7,7 @@ import {
   FiCopy,
   FiCheck,
 } from "react-icons/fi";
-import useSystemSound from "../hooks/useSystemSound";
+import useSystemSound from "../../../hooks/useSystemSound";
 
 // --- DUMMY CONTENT (Replace with real props/CMS data later) ---
 const ARTICLE_DATA = {

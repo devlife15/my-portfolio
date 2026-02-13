@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useCursor } from "../utils/CursorContext"; // Ensure path is correct
+import { useCursor } from "../../utils/CursorContext"; // Ensure path is correct
 
 const CustomCursor = () => {
   const { cursorVariant } = useCursor();

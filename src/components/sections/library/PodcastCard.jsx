@@ -1,6 +1,6 @@
 import React from "react";
 import { FiPlay, FiHeadphones } from "react-icons/fi";
-import useSystemSound from "../hooks/useSystemSound";
+import useSystemSound from "../../../hooks/useSystemSound";
 
 const PodcastCard = ({ title, show, episode, image, link }) => {
   const { playSound } = useSystemSound();

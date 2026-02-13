@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiArrowUpRight, FiBriefcase, FiCalendar } from "react-icons/fi";
-import useSystemSound from "../hooks/useSystemSound";
+import useSystemSound from "../../../hooks/useSystemSound";
 
 const WORK_DATA = [
   {

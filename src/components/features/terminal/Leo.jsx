@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Lottie from "lottie-react";
-import robotAnimation from "../assets/animations/robot.json";
+import robotAnimation from "../../../assets/animations/robot.json";
 
 const Leo = ({ isOpen }) => {
   const [showBubble, setShowBubble] = useState(false);

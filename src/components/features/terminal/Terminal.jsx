@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import { commands } from "../data/commands"; // Ensure paths are correct
-import { blogArticles } from "../data/blogPublished";
-import { codingQuotes } from "../data/codingQuotes";
-import { executeCommand } from "../utils/commandExecutor";
-import { programmingMemes } from "../data/programmingMemes";
+import { commands } from "../../../data/commands";
+import { blogArticles } from "../../../data/blogPublished";
+import { codingQuotes } from "../../../data/codingQuotes";
+import { executeCommand } from "../../../utils/commandExecutor";
+import { programmingMemes } from "../../../data/programmingMemes";
 import TerminalOutput from "./TerminalOutput";
-import "../customStyle.css";
+import "../../../customStyle.css";
 
 const Terminal = () => {
   const [input, setInput] = useState("");

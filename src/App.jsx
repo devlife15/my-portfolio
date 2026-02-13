@@ -1,9 +1,8 @@
 import { useState } from "react";
-import ParticleNetwork from "./components/ParticleNetwork";
 import PortfolioPage from "./components/PortfolioPage";
-import Preloader from "./components/PreLoader";
-import FloatingASCII from "./components/FlotingASCII";
-import SmoothScroll from "./components/SmoothScroll";
+import Preloader from "./components/effects/PreLoader";
+import FloatingASCII from "./components/effects/FloatingASCII";
+import SmoothScroll from "./components/effects/SmoothScroll";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

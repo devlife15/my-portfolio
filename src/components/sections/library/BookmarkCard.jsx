@@ -1,6 +1,6 @@
 import React from "react";
 import { FiArrowUpRight, FiLink } from "react-icons/fi";
-import useSystemSound from "../hooks/useSystemSound";
+import useSystemSound from "../../../hooks/useSystemSound";
 
 const BookmarkCard = ({ title, source, link }) => {
   const { playSound } = useSystemSound();

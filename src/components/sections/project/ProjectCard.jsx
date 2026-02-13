@@ -1,5 +1,5 @@
 import React from "react";
-import useSystemSound from "../hooks/useSystemSound";
+import useSystemSound from "../../../hooks/useSystemSound";
 
 const ProjectCard = ({ title, description, year, src }) => {
   const { playSound } = useSystemSound();

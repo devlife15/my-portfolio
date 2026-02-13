@@ -1,5 +1,5 @@
-import { TECH_DATA } from "../data/techData";
-import "../marqueeStyle.css";
+import { TECH_DATA } from "../../../data/techData";
+import "../../../marqueeStyle.css";
 
 const TechIcon = ({ icon, name }) => (
   <div className="group relative w-7 h-7 flex items-center justify-center">

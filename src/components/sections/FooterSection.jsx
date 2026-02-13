@@ -38,7 +38,7 @@ const TECH_STACK = [
   },
 ];
 
-const Footer = ({ ref }) => {
+const FooterSection = ({ ref }) => {
   return (
     <footer
       ref={ref}
@@ -79,4 +79,4 @@ const Footer = ({ ref }) => {
   );
 };
 
-export default Footer;
+export default FooterSection;

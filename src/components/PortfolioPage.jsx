@@ -1,24 +1,20 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import BootScreen from "./BootScreen";
-import Dock from "./Dock";
-import GithubStats from "./GithubStats";
+import BootScreen from "./layout/BootScreen";
+import Dock from "./features/Dock";
 import { useLofi } from "../hooks/useLofi";
-import ScrambleText from "./ScrambleText";
-import Tagline from "./Tagline";
-import TerminalModal from "./TerminalModal";
-import TechStack from "./TechStack";
-import ProjectCard from "./ProjectCard";
-import WritingRow from "./WritingRow";
-import { FiArrowRight } from "react-icons/fi";
-import LibraryRow from "./LibraryRow";
-import BookmarkCard from "./BookmarkCard";
-import PodcastCard from "./PodcastCard";
-import { PROJECTS_DATA } from "../data/projectsData";
-import ProjectList from "./ProjectList";
-import Footer from "./Footer";
-import WorkExperience from "./WorkExperience";
+import TerminalModal from "./features/terminal/TerminalModal";
+import HeroSection from "./sections/HeroSection";
+import ProjectSection from "./sections/ProjectSection";
+import TechStackSection from "./sections/TechStackSection";
+import WorkExpSection from "./sections/WorkExpSection";
+import BlogsSection from "./sections/BlogsSection";
+import GithubSection from "./sections/GithubSection";
+import BooksSection from "./sections/BooksSection";
+import ArticleSection from "./sections/ArticleSection";
+import PodcastsSection from "./sections/PodcastsSection";
+import FooterSection from "./sections/FooterSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,9 +36,7 @@ const PortfolioPage = () => {
   const footerRef = useRef(null);
 
   useLayoutEffect(() => {
-    // Switched to useLayoutEffect for smoother initialization
     const ctx = gsap.context(() => {
-      // --- 1. HERO ANIMATION (Unchanged) ---
       const tl = gsap.timeline({ delay: 0.3 });
       tl.fromTo(
         headerRef.current,
@@ -55,9 +49,8 @@ const PortfolioPage = () => {
         "-=0.3",
       );
 
-      // --- HELPER FOR SIMPLE SECTIONS ---
       const scrollReveal = (element) => {
-        if (!element) return; // Safety check
+        if (!element) return;
         gsap.fromTo(
           element,
           { opacity: 0, y: 50 },
@@ -74,12 +67,6 @@ const PortfolioPage = () => {
           },
         );
       };
-
-      // --- 2. COMPLEX SECTIONS (Experience & Projects) ---
-      // Fix: Don't animate the container (experienceRef/projectsRef).
-      // Only animate the items inside.
-
-      // Experience Section
       gsap.fromTo(
         experienceRef.current.querySelectorAll(".work-card"),
         { opacity: 0, y: 50 }, // Start state
@@ -97,7 +84,6 @@ const PortfolioPage = () => {
         },
       );
 
-      // Featured Projects Section (The Fix)
       gsap.fromTo(
         projectsSectionRef.current.querySelectorAll(".project-card"),
         { opacity: 0, y: 50 },
@@ -114,9 +100,6 @@ const PortfolioPage = () => {
           },
         },
       );
-
-      // --- 3. SIMPLE SECTIONS ---
-      // These animate the whole block at once
       scrollReveal(techSectionRef.current);
       scrollReveal(writingsSectionRef.current);
       scrollReveal(activitySectionRef.current);
@@ -131,124 +114,16 @@ const PortfolioPage = () => {
   return (
     <div className="min-h-screen text-[#888888] font-sans selection:bg-white/20 selection:text-white">
       {!hasEntered && <BootScreen onEnter={() => setHasEntered(true)} />}
-
       <Dock onTerminalClick={() => setIsTerminalOpen(true)} />
-
       <TerminalModal
         isOpen={isTerminalOpen}
         onClose={() => setIsTerminalOpen(false)}
         musicState={{ isPlaying, togglePlay, nextTrack }}
       />
-
       <div className="relative z-10 max-w-150 mx-auto px-6 py-24 md:py-32 flex flex-col gap-15">
-        {/* 1. HEADER - On load animation */}
-        <section
-          ref={headerRef}
-          className="flex flex-col gap-8"
-          style={{ opacity: 0 }}
-        >
-          {" "}
-          {/* Start invisible */}
-          <div className="flex items-center justify-between w-full">
-            {/* LEFT SIDE: Avatar + Name/Tagline */}
-            <div className="flex items-center gap-5">
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 border border-white/5 overflow-hidden shadow-inner shrink-0">
-                <img
-                  src="https://github.com/devlife15.png"
-                  alt="Ayan"
-                  className="w-full h-full object-cover opacity-90"
-                />
-              </div>
-              <div className="flex flex-col">
-                <ScrambleText
-                  text={"Ayan Kumar"}
-                  className="font-editorial text-[20px] italic font-light text-[#EEEEEE] leading-tight"
-                />
-                <Tagline />
-              </div>
-            </div>
-
-            {/* RIGHT SIDE: The Badge */}
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20 shrink-0">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              <span className="hidden md:inline">Available for work</span>
-              <span className="md:hidden">Available</span>{" "}
-              {/* Optional: Shorten text on mobile */}
-            </span>
-          </div>
-          <div
-            ref={aboutRef}
-            className="font-geist text-[16px] leading-[1.6] space-y-5 text-[#999999]"
-          >
-            <p>I'm a full-stack engineer based in Kolkata, India.</p>
-            <p>
-              I care deeply about writing clean code, building thoughtful user
-              experiences, and continuously improving my craft.
-            </p>
-            <p>
-              I’m currently seeking opportunities where I can contribute, learn
-              fast, and build software that matters. If that sounds aligned with
-              what you’re creating, let’s start a conversation.
-            </p>
-          </div>
-        </section>
-
-        {/* --- EXPERIENCE SECTION --- */}
-        {/* Note: This will animate the entire list as one block. 
-    If you want each job to stagger, you need to add className="work-card" 
-    inside the WorkExperience.jsx map loop instead. */}
-        <section ref={experienceRef}>
-          <div className="work-card" style={{ opacity: 0 }}>
-            <WorkExperience />
-          </div>
-        </section>
-
-        {/* --- PROJECTS SECTION (FIXED) --- */}
-        <section ref={projectsSectionRef} className="flex flex-col gap-8">
-          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic mb-2">
-            Featured Projects
-          </h2>
-
-          <div className="flex flex-col gap-5">
-            {/* PROJECT 1 */}
-            <div className="project-card" style={{ opacity: 0 }}>
-              <ProjectCard
-                title={"Help Deskly"}
-                description={
-                  "A command-line interface portfolio built with React."
-                }
-                year={"2026"}
-                src={"src/assets/her.jpeg"}
-              />
-            </div>
-
-            {/* PROJECT 2 */}
-            <div className="project-card" style={{ opacity: 0 }}>
-              <ProjectCard
-                title={"Supply Chain V1"}
-                description={
-                  "Inventory management system for high-volume water plants."
-                }
-                year={"2025"}
-                src={"src/assets/1.jpg"}
-              />
-            </div>
-
-            {/* PROJECT 3 */}
-            <div className="project-card" style={{ opacity: 0 }}>
-              <ProjectCard
-                title={"Portfolio OS"}
-                description={"A web-based operating system experience."}
-                year={"2025"}
-                src={"src/assets/her2.jpeg"}
-              />
-            </div>
-          </div>
-        </section>
-
+        <HeroSection ref={headerRef} aboutRef={aboutRef} />
+        <WorkExpSection ref={experienceRef} />
+        <ProjectSection ref={projectsSectionRef} />
         {/* <section className={`flex flex-col gap-10`}>
           <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic">
             Featured Projects
@@ -256,185 +131,13 @@ const PortfolioPage = () => {
 
           <ProjectList projects={PROJECTS_DATA} />
         </section> */}
-
-        <section ref={techSectionRef} style={{ opacity: 0 }}>
-          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic mb-6">
-            Tech Stack
-          </h2>
-          <div className="opacity-60 hover:opacity-100 transition-opacity duration-500 -ml-3">
-            <TechStack />
-          </div>
-        </section>
-
-        <section
-          ref={writingsSectionRef}
-          className="flex flex-col gap-8"
-          style={{ opacity: 0 }}
-        >
-          <h2 className="font-editorial text-[22px] text-[#EEEEEE] italic mb-2">
-            Writings
-          </h2>
-          <div className="flex flex-col">
-            {/* Render 5-6 Items */}
-            <WritingRow
-              title="How I built a terminal portfolio with React"
-              date="Oct 2025"
-              link="#"
-            />
-            <WritingRow
-              title="Understanding React Server Components"
-              date="Sep 2025"
-              link="#"
-            />
-            <WritingRow
-              title="The art of micro-interactions"
-              date="Aug 2025"
-              link="#"
-            />
-            <WritingRow
-              title="Why I switched from VS Code to Neovim"
-              date="Jul 2025"
-              link="#"
-            />
-            <WritingRow
-              title="Designing for dark mode first"
-              date="Jun 2025"
-              link="#"
-            />
-          </div>
-
-          <a
-            href="/blog"
-            className="group inline-flex items-center gap-2 text-xs font-geistmono text-[#666666] hover:text-white transition-colors"
-          >
-            <span>read all posts</span>
-            <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
-          </a>
-        </section>
-
-        <section ref={activitySectionRef} style={{ opacity: 0 }}>
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
-            Github Activity
-          </h2>
-          <div className="opacity-60 hover:opacity-100 transition-opacity duration-500 -ml-3">
-            <GithubStats username="devlife15" />
-          </div>
-        </section>
-
-        <section
-          className={`flex flex-col gap-8`}
-          ref={librarySectionRef}
-          style={{ opacity: 0 }}
-        >
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
-            Library
-          </h2>
-
-          <div className="flex flex-col">
-            <LibraryRow
-              title="Functional Programming in Scala"
-              author="Michael Pilquist, Rúnar Bjarnason, and Paul Chiusano"
-              status="Reading"
-              cover="https://images.manning.com/360/480/resize/book/7/28e607e-d1f1-4a84-badc-d8f436f4e4b9/Pilquist-2ed-HI.png"
-              link="https://www.manning.com/books/functional-programming-in-scala-second-edition"
-            />
-
-            <LibraryRow
-              title="Atomic Habits"
-              author="James Clear"
-              status="Reading"
-              cover="https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385i/40121378.jpg"
-              link="https://www.amazon.in/Atomic-Habits-James-Clear/dp/1847941834"
-            />
-
-            <LibraryRow
-              title="The Pragmatic Programmer"
-              author="David Thomas & Andrew Hunt"
-              status="To Read"
-              cover="https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1401432508i/4099.jpg"
-              link="#"
-            />
-            <LibraryRow
-              title="Source Code"
-              author="Bill Gates"
-              status="To Read"
-              cover="https://m.media-amazon.com/images/I/71yR+jQLqXL._AC_UF1000,1000_QL80_.jpg"
-              link="https://www.amazon.in/Source-Code-Beginnings-Bill-Gates-ebook/dp/B0D5TZ1N6M"
-            />
-          </div>
-        </section>
-
-        <section
-          className={`flex flex-col gap-8`}
-          ref={bookmarksSectionRef}
-          style={{ opacity: 0 }}
-        >
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
-            Bookmarks
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <BookmarkCard
-              title="The end of localhost"
-              source="DX Tips"
-              link="https://dx.tips/the-end-of-localhost"
-            />
-
-            <BookmarkCard
-              title="Just JavaScript: The Mental Models"
-              source="Dan Abramov"
-              link="https://..."
-            />
-
-            <BookmarkCard
-              title="Design Engineering as a process"
-              source="Vercel"
-              link="https://..."
-            />
-
-            <BookmarkCard
-              title="Why I'm betting on Rust"
-              source="Discord"
-              link="https://..."
-            />
-          </div>
-        </section>
-
-        <section
-          className={`flex flex-col gap-8`}
-          ref={podcastsSectionRef}
-          style={{ opacity: 0 }}
-        >
-          <h2 className="font-editorial text-[18px] text-[#EEEEEE] italic mb-2">
-            Listening
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
-            <PodcastCard
-              show="Syntax.fm"
-              title="Should a New Coder Use AI"
-              episode="978"
-              image="https://is1-ssl.mzstatic.com/image/thumb/Podcasts221/v4/37/48/97/3748974f-e0ae-159f-d869-37e1a146b2ea/mza_6771083142990398129.jpeg/300x300bb.webp"
-              link="https://syntax.fm/show/978/should-a-new-coder-use-ai"
-            />
-
-            <PodcastCard
-              show="Lex Fridman"
-              title="Sam Altman: OpenAI, GPT-5, and AGI"
-              episode="367"
-              image="https://is1-ssl.mzstatic.com/image/thumb/Podcasts115/v4/3e/e3/9c/3ee39c89-de08-47a6-7f3d-3849cef6d255/mza_16657851278549137484.png/300x300bb.webp"
-              link="https://..."
-            />
-
-            <PodcastCard
-              show="Decoder"
-              title="Siemens CEO's Mission to Automate Everything"
-              image="https://is1-ssl.mzstatic.com/image/thumb/Podcasts112/v4/35/2c/4e/352c4ee6-46db-7aff-4287-fc9b7cc3e1b6/mza_3811812518505699598.jpg/300x300bb.webp"
-              link="https://podcasts.apple.com/in/podcast/siemens-ceos-mission-to-automate-everything/id1011668648?i=1000748886990"
-            />
-          </div>
-        </section>
-        <Footer ref={footerRef} />
+        <TechStackSection ref={techSectionRef} />
+        <GithubSection ref={activitySectionRef} />
+        <BlogsSection ref={writingsSectionRef} />
+        <BooksSection ref={librarySectionRef} />
+        <ArticleSection ref={bookmarksSectionRef} />
+        <PodcastsSection ref={podcastsSectionRef} />
+        <FooterSection ref={footerRef} />
       </div>
     </div>
   );

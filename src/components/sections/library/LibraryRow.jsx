@@ -1,6 +1,6 @@
 import React from "react";
 import { FiBookOpen, FiClock, FiCheckCircle } from "react-icons/fi";
-import useSystemSound from "../hooks/useSystemSound";
+import useSystemSound from "../../../hooks/useSystemSound";
 
 const LibraryRow = ({ title, author, status, rating, cover, link }) => {
   const { playSound } = useSystemSound();

@@ -1,6 +1,6 @@
 import React from "react";
 import { FiArrowUpRight } from "react-icons/fi";
-import useSystemSound from "../hooks/useSystemSound";
+import useSystemSound from "../../../hooks/useSystemSound";
 
 const WritingRow = ({ title, date, link }) => {
   const { playSound } = useSystemSound();
